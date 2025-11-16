@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sorry Arya — Ultra Premium ❤️</title>
+
+<!-- Google Font (fallbacks included) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg1:#0f0326;
+    --bg2:#3b0f3a;
+    --accent:#ff5d8f;
+    --glass: rgba(255,255,255,0.08);
+    --glass-strong: rgba(255,255,255,0.12);
+    --card-w: 920px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:'Poppins',system-ui,Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  body{
+    background: radial-gradient(1200px 600px at 10% 20%, rgba(255,95,142,0.12) 0%, transparent 12%),
+                radial-gradient(900px 500px at 90% 80%, rgba(64,37,115,0.12) 0%, transparent 12%),
+                linear-gradient(180deg, var(--bg1), var(--bg2));
+    overflow:hidden;
+    color:#fff;
+  }
+
+  /* Stage */
+  .stage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+    position:relative;
+  }
+
+  /* cinematic overlay for intro */
+  .cinema {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.25));
+    pointer-events:none;
+    mix-blend-mode:overlay;
+  }
+
+  /* Glass card */
+  .card{
+    width: min(var(--card-w), 94%);
+    max-width: var(--card-w);
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border-radius: 20px;
+    padding: 28px;
+    display:grid;
+    grid-template-columns: 420px 1fr;
+    gap:24px;
+    align-items:center;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 6px 18px rgba(255,95,142,0.06) inset;
+    border: 1px solid rgba(255,255,255,0.06);
+    position:relative;
+    z-index:10;
+    overflow:visible;
+  }
+
+  /* left panel — visual */
+  .visual {
+    position:relative;
+    height:420px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    perspective:1200px;
+  }
+
+  /* neon 3D heart using svg */
+  .neon-wrap{
+    width:340px; height:340px;
+    transform-style:preserve-3d;
+    transition: transform 0.6s cubic-bezier(.2,.9,.25,1);
+  }
+
+  /* shimmering glow */
+  .neon-svg{
+    filter: drop-shadow(0 10px 20px rgba(255,93,143,0.18)) drop-shadow(0 4px 12px rgba(255,93,143,0.12));
+    transform: translateZ(40px);
+  }
+
+  /* heartbeat scale */
+  .neon-svg .heart-path{
+    transform-origin:center center;
+    animation: heartbeat 1.45s infinite ease-in-out;
+  }
+  @keyframes heartbeat{
+    0%{ transform:scale(1); }
+    28%{ transform:scale(1.15); }
+    45%{ transform:scale(1); }
+    65%{ transform:scale(1.07); }
+    100%{ transform:scale(1); }
+  }
+
+  /* rose petals canvas sits behind */
+  #petalsCanvas{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:1;
+    mix-blend-mode:screen;
+  }
+
+  /* right panel — text */
+  .content{
+    padding:8px 4px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  h1{
+    margin:6px 0;
+    font-size:28px;
+    letter-spacing:0.2px;
+    font-weight:800;
+    color: #fff;
+    text-shadow: 0 6px 30px rgba(255,93,143,0.08);
+  }
+  .subtitle{
+    margin:0; font-size:14px; opacity:0.9;
+    color: #ffd9e6;
+  }
+
+  /* typing paragraphs — step wise */
+  .message{
+    margin-top:6px;
+    font-size:18px;
+    line-height:1.6;
+    color: #fff;
+    min-height:120px;
+  }
+  .controls{
+    display:flex; gap:10px; align-items:center; margin-top:8px;
+  }
+  .btn{
+    background:linear-gradient(180deg, rgba(255,93,143,0.95), rgba(255,60,120,0.95));
+    border: none; color:white; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600;
+    box-shadow: 0 6px 18px rgba(255,93,143,0.12);
+  }
+  .btn-muted{
+    background:transparent; border:1px solid rgba(255,255,255,0.06);
+    padding:8px 12px; border-radius:10px; color:#ffd9e6; cursor:pointer;
+  }
+
+  /* small visualizer canvas */
+  #viz{
+    width:100%; height:72px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+    border:1px solid rgba(255,255,255,0.03); margin-top:12px;
+  }
+
+  /* mouse sparkles */
+  .spark{
+    position:fixed; left:0; top:0; width:10px; height:10px; border-radius:50%;
+    pointer-events:none; transform:translate(-50%,-50%); z-index:90;
+    mix-blend-mode:screen;
+    box-shadow:0 0 10px rgba(255,255,255,0.9);
+    opacity:0.95;
+  }
+
+  /* intro cinematic title overlay */
+  .intro{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:30;
+    pointer-events:none;
+  }
+  .intro .big{
+    font-size:48px; font-weight:900; letter-spacing:6px; color:transparent;
+    -webkit-text-stroke:1px rgba(255,255,255,0.06);
+    background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,93,143,0.95));
+    -webkit-background-clip:text; background-clip:text;
+    opacity:0; transform:translateY(12px); animation: introShow 1.6s ease forwards;
+  }
+  @keyframes introShow{
+    0%{opacity:0; transform:translateY(25px) scale(.98);}
+    40%{opacity:1; transform:translateY(0) scale(1.02);}
+    100%{opacity:1; transform:translateY(0) scale(1);}
+  }
+
+  /* responsive */
+  @media(max-width:900px){
+    .card{ grid-template-columns: 1fr; padding:18px; gap:18px; }
+    .visual{height:360px}
+  }
+  @media(max-width:480px){
+    h1{font-size:22px}
+    .neon-wrap{width:260px;height:260px}
+    .visual{height:300px}
+    .message{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <canvas id="petalsCanvas"></canvas>
+
+  <div class="card" id="card">
+    <!-- LEFT: VISUAL -->
+    <div class="visual">
+      <div class="neon-wrap" id="neonWrap" title="Arya ❤️">
+        <!-- SVG Neon Heart with inner glow and stroke -->
+        <svg class="neon-svg" viewBox="0 0 200 200" width="340" height="340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="grainy">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feColorMatrix type="matrix"
+                values="1 0 0 0 0
+                        0 0.1 0 0 0
+                        0 0 0.25 0 0
+                        0 0 0 1 0" />
+            </filter>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <radialGradient id="inner" cx="40%" cy="30%">
+              <stop offset="0%" stop-color="#fff4f6" stop-opacity="0.9"/>
+              <stop offset="55%" stop-color="#ff9ab1" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#ff4d79" stop-opacity="0.6"/>
+            </radialGradient>
+          </defs>
+
+          <!-- heart path -->
+          <g transform="translate(100,110) scale(0.9)">
+            <path class="heart-path" d="M0,-40 C-25,-70 -70,-60 -70,-25 C-70,5 -30,35 0,60 C30,35 70,5 70,-25 C70,-60 25,-70 0,-40 Z"
+              fill="url(#inner)" stroke="rgba(255,255,255,0.07)" stroke-width="1.5" />
+            <!-- neon strokes -->
+            <path d="M0,-40 C-25,-70 -70,-60 -70,-25 C-70,5 -30,35 0,60 C30,35 70,5 70,-25 C70,-60 25,-70 0,-40 Z"
+              fill="none" stroke="#ff7aa6" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" filter="url(#glow)"/>
+            <path d="M0,-40 C-25,-70 -70,-60 -70,-25 C-70,5 -30,35 0,60 C30,35 70,5 70,-25 C70,-60 25,-70 0,-40 Z"
+              fill="none" stroke="#ff2b6a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- RIGHT: CONTENT -->
+    <div class="content">
+      <h1>Dear Arya,</h1>
+      <p class="subtitle">I made this page just to say — I'm truly sorry. Read slowly, I typed it for you.</p>
+
+      <div class="message" id="message">
+        <!-- paragraphs will be typed in by JS -->
+      </div>
+
+      <canvas id="viz"></canvas>
+
+      <div class="controls">
+        <button class="btn" id="playIntroBtn">Play Cinematic Intro</button>
+        <button class="btn-muted" id="toggleMusicBtn">Pause Music</button>
+        <button class="btn-muted" id="downloadBtn">Save / Share (Download HTML)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- cinematic intro overlay -->
+  <div class="intro" id="introOverlay">
+    <div class="big">A SINCERE SORRY</div>
+  </div>
+
+  <!-- decorative cinema overlay -->
+  <div class="cinema"></div>
+</div>
+
+<!-- music element -->
+<audio id="bg-music" crossorigin="anonymous">
+  <!-- default: replace with your own mp3 if desired -->
+  <source src="https://cdn.pixabay.com/download/audio/2021/08/05/audio_1b121b53a8.mp3?filename=romantic-piano-10904.mp3" type="audio/mpeg">
+  Your browser does not support audio.
+</audio>
+
+<script>
+/* ---------------------------
+   Setup: petals canvas
+   --------------------------- */
+const canvas = document.getElementById('petalsCanvas');
+const ctx = canvas.getContext('2d');
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+/* Petal class */
+class Petal {
+  constructor(){
+    this.reset();
+  }
+  reset(){
+    this.x = Math.random()*canvas.width;
+    this.y = -Math.random()*canvas.height - 20;
+    this.size = 10 + Math.random()*20;
+    this.speedY = 0.5 + Math.random()*2.2;
+    this.speedX = -1 + Math.random()*2;
+    this.rotation = Math.random()*Math.PI*2;
+    this.spin = (Math.random()-0.5)*0.02;
+    this.opacity = 0.6 + Math.random()*0.4;
+    this.color = `hsla(${320 + Math.random()*20},90%,60%,${this.opacity})`;
+    this.sway = Math.random()*80 + 20;
+    this.started = performance.now() - Math.random()*10000;
+  }
+  update(dt){
+    this.y += this.speedY * dt;
+    this.x += Math.sin((this.y/this.sway))*this.speedX;
+    this.rotation += this.spin * dt;
+    if(this.y > canvas.height + 40) this.reset();
+  }
+  draw(ctx){
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.scale(1,0.7);
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.moveTo(0, -this.size/2);
+    ctx.bezierCurveTo(this.size, -this.size/2, this.size, this.size/2, 0, this.size/2);
+    ctx.bezierCurveTo(-this.size, this.size/2, -this.size, -this.size/2, 0, -this.size/2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+let petals = Array.from({length: 40}, ()=> new Petal());
+let lastTime = performance.now();
+(function animate(){
+  const now = performance.now();
+  const dt = (now - lastTime) * 0.06;
+  lastTime = now;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let p of petals){
+    p.update(dt);
+    p.draw(ctx);
+  }
+  requestAnimationFrame(animate);
+})();
+
+/* ---------------------------
+   Mouse-follow sparkles
+   --------------------------- */
+const stage = document.getElementById('stage');
+function makeSpark(x,y){
+  const s = document.createElement('div');
+  s.className='spark';
+  document.body.appendChild(s);
+  s.style.left = x + 'px';
+  s.style.top = y + 'px';
+  s.style.width = s.style.height = (6 + Math.random()*14) + 'px';
+  s.style.background = `radial-gradient(circle, rgba(255,255,255,0.95), ${(Math.random()>0.5? '#ffb2cf':'#ffd6e8')})`;
+  s.style.opacity = 0.9;
+  s.style.transform = `translate(-50%,-50%) scale(${0.6 + Math.random()*1.4})`;
+  s.style.transition = 'transform 700ms cubic-bezier(.2,.8,.3,1), opacity 700ms';
+  setTimeout(()=> {
+    s.style.transform = `translate(-50%,-50%) scale(${2 + Math.random()*1})`;
+    s.style.opacity = 0;
+  }, 20);
+  setTimeout(()=> s.remove(), 820);
+}
+let mouseTimeout;
+document.addEventListener('mousemove', e=>{
+  makeSpark(e.clientX, e.clientY);
+  clearTimeout(mouseTimeout);
+  // small burst
+  mouseTimeout = setTimeout(()=> {
+    for(let i=0;i<5;i++) makeSpark(e.clientX + (Math.random()*40-20), e.clientY + (Math.random()*40-20));
+  }, 40);
+});
+
+/* ---------------------------
+   Neon-wrap 3D tilt on mouse
+   --------------------------- */
+const neonWrap = document.getElementById('neonWrap');
+document.addEventListener('mousemove', e=>{
+  const rect = neonWrap.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const dx = (e.clientX - cx) / rect.width;
+  const dy = (e.clientY - cy) / rect.height;
+  neonWrap.style.transform = `rotateY(${dx*12}deg) rotateX(${-dy*10}deg) translateZ(0)`;
+});
+
+/* reset tilt when leaving */
+document.addEventListener('mouseleave', ()=> neonWrap.style.transform = 'none');
+
+/* ---------------------------
+   Intro overlay (click play)
+   --------------------------- */
+const intro = document.getElementById('introOverlay');
+const playIntroBtn = document.getElementById('playIntroBtn');
+playIntroBtn.addEventListener('click', ()=> {
+  intro.style.pointerEvents='auto';
+  intro.querySelector('.big').style.animation = 'introShow 1.6s ease forwards';
+  intro.style.transition = 'opacity 0.9s ease';
+  intro.style.opacity = 1;
+  setTimeout(()=> {
+    intro.style.opacity = 0;
+    setTimeout(()=> intro.style.display='none', 900);
+  }, 2800);
+});
+
+/* ---------------------------
+   Typing effect (paragraph by paragraph)
+   --------------------------- */
+const messageEl = document.getElementById('message');
+const paragraphs = [
+  "I’m so sorry, Arya. I didn’t mean for things to go this way.",
+  "I realize now how my words/actions made you feel, and that hurts me.",
+  "You mean a lot to me — more than I probably show — and losing your trust scares me.",
+  "Please forgive me. I promise to listen better, be kinder, and not repeat my mistake.",
+  "If you give me another chance, I’ll spend every day proving I deserve it. — Yours",
+  "Maaf karde yrr isse jyada english nhi ati y bhi thodi google se li hai"
+];
+
+let pIndex = 0;
+function typeParagraph(i){
+  if(i >= paragraphs.length) return;
+  const text = paragraphs[i];
+  const span = document.createElement('div');
+  span.style.marginBottom = '10px';
+  messageEl.appendChild(span);
+  let char=0;
+  const speed = 28 + Math.random()*18;
+  function step(){
+    if(char < text.length){
+      span.textContent += text[char++];
+      setTimeout(step, speed);
+    } else {
+      // after finishing paragraph, wait then type next
+      setTimeout(()=> typeParagraph(i+1), 600);
+    }
+  }
+  step();
+}
+setTimeout(()=> typeParagraph(0), 900); // small delay before typing starts
+
+/* ---------------------------
+   Audio + Visualizer
+   --------------------------- */
+const audio = document.getElementById('bg-music');
+const toggleMusicBtn = document.getElementById('toggleMusicBtn');
+let audioCtx, analyser, sourceNode;
+const vizCanvas = document.getElementById('viz');
+const vctx = vizCanvas.getContext('2d');
+
+function setupAudio(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+  sourceNode = audioCtx.createMediaElementSource(audio);
+  sourceNode.connect(analyser);
+  analyser.connect(audioCtx.destination);
+
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  function draw(){
+    requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(dataArray);
+    vctx.clearRect(0,0,vizCanvas.width, vizCanvas.height);
+    const barWidth = vizCanvas.width / bufferLength;
+    for(let i=0;i<bufferLength;i++){
+      const val = dataArray[i];
+      const percent = val / 255;
+      const h = vizCanvas.height * percent;
+      const x = i * barWidth;
+      const hue = 320 + i*0.6;
+      vctx.fillStyle = `hsl(${hue},80%,60%)`;
+      vctx.fillRect(x, vizCanvas.height - h, barWidth*0.9, h);
+    }
+  }
+  draw();
+}
+
+/* ensure canvas sized */
+function resizeViz(){
+  vizCanvas.width = document.querySelector('.content').clientWidth - 24;
+  vizCanvas.height = 72;
+}
+resizeViz();
+window.addEventListener('resize', resizeViz);
+
+audio.addEventListener('play', ()=> {
+  try { setupAudio(); audioCtx.resume(); } catch(e){/*ignore*/ }
+});
+toggleMusicBtn.addEventListener('click', ()=>{
+  if(audio.paused){ audio.play(); toggleMusicBtn.textContent = 'Pause Music'; }
+  else { audio.pause(); toggleMusicBtn.textContent = 'Play Music'; }
+});
+
+/* start music autoplay attempt */
+audio.volume = 0.65;
+audio.loop = true;
+audio.play().catch(()=> { /* autoplay blocked on some browsers, user can press button */ });
+
+/* ---------------------------
+   Download current HTML (save)
+   --------------------------- */
+const downloadBtn = document.getElementById('downloadBtn');
+downloadBtn.addEventListener('click', ()=> {
+  // grab full document's HTML and prompt download
+  const htmlContent = '<!doctype html>\\n' + document.documentElement.outerHTML;
+  const blob = new Blob([htmlContent], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'sorry_arya_ultra_premium.html';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* ---------------------------
+   Optional: small parallax card movement
+   --------------------------- */
+const card = document.getElementById('card');
+document.addEventListener('mousemove', (e) => {
+  const rect = stage.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width - 0.5;
+  const py = (e.clientY - rect.top) / rect.height - 0.5;
+  card.style.transform = `translateX(${px*8}px) translateY(${py*6}px)`;
+  // subtle rotate
+  card.style.transition = 'transform 0.08s linear';
+});
+
+/* ---------------------------
+   Setup: init audio context on first user gesture (some browsers block)
+   --------------------------- */
+['click','touchstart','keydown','mousemove'].forEach(evt => {
+  window.addEventListener(evt, function initOnce(){
+    try {
+      if(!audioCtx) setupAudio();
+    } catch(e){}
+    window.removeEventListener(evt, initOnce);
+  });
+});
+
+/* ---------------------------
+   Friendly: show a hint to enable audio (if blocked)
+   --------------------------- */
+setTimeout(()=> {
+  if(audio.paused){
+    toggleMusicBtn.textContent = 'Play Music';
+  } else {
+    toggleMusicBtn.textContent = 'Pause Music';
+  }
+}, 900);
+
+/* ---------------------------
+   Extra: resume audio context when user clicks anywhere
+   --------------------------- */
+document.addEventListener('click', ()=> {
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+});
+
+/* ---------------------------
+   Start visualizer when audio context ready and play
+   --------------------------- */
+audio.addEventListener('canplay', ()=> {
+  if(!audioCtx) setupAudio();
+});
+
+/* End of script */
+</script>
+
+</body>
+</html>
